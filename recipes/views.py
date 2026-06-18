@@ -70,7 +70,10 @@ def recipe_create(request):
 
 @login_required
 def recipe_edit(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+    recipe = get_object_or_404(Recipe, pk=pk)
+    if recipe.author != request.user and not request.user.is_staff:
+        messages.error(request, 'Нет прав для редактирования этого рецепта.')
+        return redirect('recipe_detail', pk=pk)
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
         if form.is_valid():
@@ -84,7 +87,10 @@ def recipe_edit(request, pk):
 
 @login_required
 def recipe_delete(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+    recipe = get_object_or_404(Recipe, pk=pk)
+    if recipe.author != request.user and not request.user.is_staff:
+        messages.error(request, 'Нет прав для удаления этого рецепта.')
+        return redirect('recipe_detail', pk=pk)
     if request.method == 'POST':
         recipe.delete()
         messages.success(request, 'Рецепт удалён.')

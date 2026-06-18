@@ -27,7 +27,7 @@
                             {% if is_favorite %}В избранном{% else %}В избранное{% endif %}
                         </a>
                         {% endif %}
-                        {% if user == recipe.author %}
+                        {% if user == recipe.author or user.is_staff %}
                         <a href="{% url 'recipe_edit' recipe.pk %}" class="btn btn-outline-secondary">
                             <i class="bi bi-pencil"></i> Изменить
                         </a>
@@ -140,7 +140,7 @@
         </div>
         {% endif %}
 
-        {% if user == recipe.author %}
+        {% if user == recipe.author or user.is_staff %}
         <div class="card border-danger mb-4">
             <div class="card-body text-center">
                 <h6 class="text-danger">Управление рецептом</h6>

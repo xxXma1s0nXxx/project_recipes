@@ -45,8 +45,6 @@ class RatingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Descending DOM order (5→1) + CSS row-reverse = visual ascending (1→2→3→4→5)
-        # This makes the ~ sibling selector correctly highlight all lower-value stars
         self.fields['score'].choices = [(i, f'{"★" * i}{"☆" * (5 - i)}') for i in range(5, 0, -1)]
 
 

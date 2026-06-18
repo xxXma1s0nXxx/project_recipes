@@ -6,10 +6,33 @@
 <div class="row">
     <div class="col-md-4 mb-4">
         <div class="card shadow-sm text-center p-4">
-            <div class="display-1 text-secondary mb-3"><i class="bi bi-person-circle"></i></div>
+            <!-- Аватар -->
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="Аватар"
+                 class="rounded-circle mx-auto d-block mb-3"
+                 style="width: 120px; height: 120px; object-fit: cover;">
+            {% else %}
+            <div class="avatar-circle-lg mx-auto mb-3">{{ user.username|first|upper }}</div>
+            {% endif %}
+
             <h4>{{ user.get_full_name|default:user.username }}</h4>
             <p class="text-muted">@{{ user.username }}</p>
             {% if user.email %}<p class="small text-muted">{{ user.email }}</p>{% endif %}
+
+            <!-- Форма загрузки аватара -->
+            <hr>
+            <p class="small text-muted mb-2">Фото профиля</p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ avatar_form.avatar }}
+                {% if avatar_form.avatar.errors %}
+                <div class="text-danger small mt-1">{{ avatar_form.avatar.errors }}</div>
+                {% endif %}
+                <button type="submit" class="btn btn-outline-primary btn-sm mt-2 w-100">
+                    <i class="bi bi-upload"></i> Загрузить
+                </button>
+            </form>
+
             <hr>
             <div class="d-flex justify-content-around">
                 <div>
@@ -23,6 +46,7 @@
             </div>
         </div>
     </div>
+
     <div class="col-md-8">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Мои рецепты</h4>

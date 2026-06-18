@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import UserProfile
 
 
 class RegisterForm(UserCreationForm):
@@ -19,3 +20,13 @@ class RegisterForm(UserCreationForm):
         self.fields['password2'].label = 'Подтверждение пароля'
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('avatar',)
+        widgets = {
+            'avatar': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+        }
+        labels = {'avatar': 'Выберите фото'}
